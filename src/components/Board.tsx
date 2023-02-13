@@ -22,11 +22,6 @@ const Wrapper =styled.div`
   background-color: ${(props) => props.theme.boardColor};
 `;
 
-interface IAreaProps {
-  isDraggingOver: boolean;
-  isDraggingFromThis: boolean;
-}
-
 const Area = styled.div<IAreaProps>`
   border-radius: 5px;
   flex-grow: 1;  
@@ -35,20 +30,30 @@ const Area = styled.div<IAreaProps>`
   props.isDraggingFromThis ? "#b2bec3" : "transparent"}; 
   transition: background-color .3s ease-in-out;
   padding: 20px;
-`
 
+`
 const Form = styled.form`
   width: 100%;
   input {
     width: 100%;
   }
+  display: flex;
+  padding: 0px 20px 0px 20px;
 `
+const Input = styled.input`
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+`;
+interface IAreaProps {
+  isDraggingOver: boolean;
+  isDraggingFromThis: boolean;
+}
 
 interface IBoardProps {
   toDos: ITodo[];
   boardId: string;
 }
-
 interface IForm {
   toDo: string;
 }
@@ -70,11 +75,13 @@ function Board({toDos, boardId}: IBoardProps){
     });
     setValue("toDo", "");
   }
+  // save to localStorage
+  localStorage.setItem(boardId, JSON.stringify(toDos));
   return (
     <Wrapper>
       <Title>{boardId}</Title>
       <Form onSubmit={handleSubmit(onValid)}>
-        <input 
+        <Input
         {...register("toDo", {required: true})}
         type="text" placeholder= {`Add Task on ${boardId}`}/>
       </Form>
