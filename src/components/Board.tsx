@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import DraggableCard from "./DraggableCard";
 import styled from "styled-components";
@@ -40,26 +41,35 @@ interface IBoardProps {
 
 
 function Board({toDos, boardId}: IBoardProps){
-    return (
-      <Wrapper>
-        <Title>{boardId}</Title>
-        <Droppable droppableId={boardId}> 
-        {(provided, info) => (
-          <Area 
-            isDraggingFromThis={Boolean(info.draggingFromThisWith)}
-            isDraggingOver={info.isDraggingOver}
-            ref={provided.innerRef} 
-            {...provided.droppableProps}>
-            {toDos.map((toDo, index) => (
-              <DraggableCard key={toDo} toDo={toDo} index={index} />
-            )
-            )}
-            {provided.placeholder}
-          </Area>
-        )}
-        </Droppable>
-      </Wrapper>
-    );
+  const inputRef = useRef<HTMLInputElement>(null);
+  const onClick=()=>{
+    inputRef.current?.focus();
+    setTimeout(() => {
+      inputRef.current?.blur();
+    }, 5000)
+  }
+  return (
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <input ref={inputRef} placeholder="grab me"></input>
+      <button onClick={onClick}>click me</button>
+      <Droppable droppableId={boardId}> 
+      {(provided, info) => (
+        <Area 
+          isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+          isDraggingOver={info.isDraggingOver}
+          ref={provided.innerRef} 
+          {...provided.droppableProps}>
+          {toDos.map((toDo, index) => (
+            <DraggableCard key={toDo} toDo={toDo} index={index} />
+          )
+          )}
+          {provided.placeholder}
+        </Area>
+      )}
+      </Droppable>
+    </Wrapper>
+  );
 };
 
 export default Board;
