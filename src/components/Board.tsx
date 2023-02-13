@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import { toDoState,ITodo } from "../atom";
 import { useForm } from "react-hook-form";
@@ -68,15 +67,17 @@ function Board({toDos, boardId}: IBoardProps){
     };
     
     setToDos((allBoards) => {
-      return {
+      const newBoards = {
         ...allBoards,
         [boardId]: [newToDo, ...allBoards[boardId]]
-      };
+      }
+      // add new item to localStorage
+      localStorage.setItem("toDos", JSON.stringify(newBoards));
+      return newBoards;
     });
     setValue("toDo", "");
   }
-  // save to localStorage
-  localStorage.setItem(boardId, JSON.stringify(toDos));
+
   return (
     <Wrapper>
       <Title>{boardId}</Title>

@@ -1,5 +1,6 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { toDoState } from "./atom";
 import Board from "./components/Board";
@@ -18,17 +19,25 @@ const Boards = styled.div`
   display: grid;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 `
 
 function App() {
   const [toDos,setToDos] = useRecoilState(toDoState);
+  console.log(toDos);
+  useEffect(()=>{
+    // get or set localStorage values
+    const curStorage = JSON.parse(localStorage.getItem("toDos")!);
+    if (!curStorage){
+      localStorage.setItem("toDos", JSON.stringify(toDos));
+    }
+  })
   const onDragEnd = (info:DropResult) => {
     console.log(info);
     const {source, destination} = info;
     if (!destination) return;
 
-    if (destination?.droppableId == source.droppableId){
+    if (destination?.droppableId === source.droppableId){
       // same board movement.
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
