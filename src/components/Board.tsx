@@ -9,6 +9,12 @@ const Wrapper =styled.div`
   min-height: 200px;
   background-color: ${(props) => props.theme.boardColor};
 `;
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 18px;
+`
 
 interface IBoardProps {
   toDos: string[];
@@ -18,6 +24,8 @@ interface IBoardProps {
 
 function Board({toDos, boardId}: IBoardProps){
     return (
+      <Wrapper>
+        <Title>{boardId}</Title>
         <Droppable droppableId={boardId}> 
         {(provided) => (
           <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
@@ -29,6 +37,7 @@ function Board({toDos, boardId}: IBoardProps){
           </Wrapper>
         )}
         </Droppable>
+      </Wrapper>
     );
 };
 
