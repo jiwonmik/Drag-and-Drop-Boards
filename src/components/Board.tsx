@@ -65,7 +65,7 @@ function Board({toDos, boardId}: IBoardProps){
     setToDos((allBoards) => {
       return {
         ...allBoards,
-        [boardId]: [...allBoards[boardId], newToDo]
+        [boardId]: [newToDo, ...allBoards[boardId]]
       };
     });
     setValue("toDo", "");
