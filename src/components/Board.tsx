@@ -29,7 +29,6 @@ const Area = styled.div<IAreaProps>`
   props.isDraggingFromThis ? "#b2bec3" : "transparent"}; 
   transition: background-color .3s ease-in-out;
   padding: 20px;
-
 `
 const Form = styled.form`
   width: 100%;
