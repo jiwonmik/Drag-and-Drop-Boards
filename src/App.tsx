@@ -1,6 +1,7 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { toDoState } from "./atom";
 import Board from "./components/Board";
@@ -21,10 +22,12 @@ const BoardWrapper = styled.div`
   display: flex;
   max-width: 680px;
   width: 100%;
-  margin: 0 auto;
+  margin: 20px 0px 0px 0px;
   justify-content: center;
   align-items: center;
   height: 500px;
+  // 수정필요: 위 board들이 보이지 않음
+  overflow: auto;
 `
 const TrashWrapper = styled.div`
     padding: 10px 0px;
@@ -37,10 +40,24 @@ const Boards = styled.div`
   width: 100%;
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
-`
-const AddBoardBtn = styled.button`
-  
 `;
+const Form = styled.form`
+  display: flex;
+`;
+const AddBoardBtn = styled.button`
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+  margin: 0px 0px 0px 10px;
+`;
+const Input = styled.input`
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+`;
+interface IForm {
+  boardName: string;
+}
 
 function App() {
   const [toDos,setToDos] = useRecoilState(toDoState);
@@ -82,11 +99,11 @@ function App() {
           const newBoards = {
             ...allBoards,
             [source.droppableId]: srcBoard,
-          }
+          };
           // delete localStorage value board
           localStorage.setItem("toDos", JSON.stringify(newBoards));
-          return newBoards
-        }
+          return newBoards;
+        };
 
         const dstBoard = [...allBoards[destination.droppableId]];
         
@@ -103,6 +120,19 @@ function App() {
       })
     }
   }
+  const {register, setValue, handleSubmit} = useForm<IForm>();
+  const onAddBoard = (data:IForm) => {
+    
+    setToDos((allBoards)=>{
+      const newBoards = {
+        ...allBoards,
+        [data.boardName]: [],
+      }
+      //  edit localStorage value board
+      localStorage.setItem("toDos", JSON.stringify(newBoards));
+      return newBoards;
+    })
+  }
 
   return (
     <>
@@ -112,9 +142,14 @@ function App() {
     </TrashWrapper>
 
     <Wrapper>
-      <AddBoardBtn>
+      <Form onSubmit={handleSubmit(onAddBoard)}>
+        <Input
+        {...register("boardName", {required: true})}
+        type="text" placeholder= {`Name your new Board.`}/>
+        <AddBoardBtn >
         ADD
-      </AddBoardBtn>
+        </AddBoardBtn>
+      </Form>
       <BoardWrapper>
         <Boards>
         {Object.keys(toDos).map(boardId => 
