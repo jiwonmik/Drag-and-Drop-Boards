@@ -38,6 +38,9 @@ const Boards = styled.div`
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
 `
+const AddBoardBtn = styled.button`
+  
+`;
 
 function App() {
   const [toDos,setToDos] = useRecoilState(toDoState);
@@ -107,7 +110,11 @@ function App() {
     <TrashWrapper>
       <Trash />
     </TrashWrapper>
+
     <Wrapper>
+      <AddBoardBtn>
+        ADD
+      </AddBoardBtn>
       <BoardWrapper>
         <Boards>
         {Object.keys(toDos).map(boardId => 
