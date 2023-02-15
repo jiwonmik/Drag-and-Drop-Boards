@@ -1,19 +1,19 @@
 import { atom } from "recoil";
 
-export interface ITodo {
+export interface IItem {
     id: number;
     text: string;
 }
 
-interface IToDoState {
-    [key: string]: ITodo[];
+interface IBoard {
+    id: number;
+    boardName: string;
+    items: IItem[]
 }
 
-export const toDoState = atom<IToDoState>({
+// get items from localStorage
+let localData = JSON.parse(localStorage.getItem("boards")!);
+export const boardState = atom<IBoard[]>({
     key: "toDo",
-    default: {
-        ["To Do"]: [{id:1,text:"read a book"}],
-        Doing: [],
-        Done:[],
-    }
+    default: localData,    
 });

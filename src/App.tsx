@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { toDoState } from "./atom";
+import { boardState } from "./atom";
 import Board from "./components/Board";
 import Trash from "./components/Trash";
 
@@ -60,76 +60,72 @@ interface IForm {
 }
 
 function App() {
-  const [toDos,setToDos] = useRecoilState(toDoState);
-  console.log(toDos);
-  useEffect(()=>{
-    // get or set localStorage values
-    const curStorage = JSON.parse(localStorage.getItem("toDos")!);
-    if (!curStorage){
-      localStorage.setItem("toDos", JSON.stringify(toDos));
-    }
-  })
+  const [boards,setBoards] = useRecoilState(boardState);
+  console.log("first", boards);
   const onDragEnd = (info:DropResult) => {
     const {source, destination} = info;
     if (!destination) return;
 
     if (destination?.droppableId === source.droppableId){
       // same board movement.
-      setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        const item = boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination.index, 0, ...item);
+      setBoards((allBoards) => {
+        const boardCopy = allBoards[source.index];
+        console.log(boardCopy);
+        return allBoards;
+        // const boardCopy = [...allBoards[source.droppableId]];
+        // const item = boardCopy.splice(source.index, 1);
+        // boardCopy.splice(destination.index, 0, ...item);
 
-        const newBoards = {
-          ...allBoards,
-          [source.droppableId]: boardCopy
-        }
-        //  edit localStorage value index
-        localStorage.setItem("toDos", JSON.stringify(newBoards));
-        return newBoards
+        // const newBoards = {
+        //   ...allBoards,
+        //   [source.droppableId]: boardCopy
+        // }
+        // //  edit localStorage value index
+        // localStorage.setItem("toDos", JSON.stringify(newBoards));
+        // return newBoards
       })}
-    else{
-      // different board movement.
-      setToDos((allBoards)=>{
-        const srcBoard = [...allBoards[source.droppableId]];
-        const item = srcBoard.splice(source.index, 1);
+    // else{
+    //   // different board movement.
+    //   setBoards((allBoards)=>{
+    //     const srcBoard = [...allBoards[source.droppableId]];
+    //     const item = srcBoard.splice(source.index, 1);
 
-        // drag to trash
-        if (destination.droppableId === "trash"){
-          const newBoards = {
-            ...allBoards,
-            [source.droppableId]: srcBoard,
-          };
-          // delete localStorage value board
-          localStorage.setItem("toDos", JSON.stringify(newBoards));
-          return newBoards;
-        };
+    //     // drag to trash
+    //     if (destination.droppableId === "trash"){
+    //       const newBoards = {
+    //         ...allBoards,
+    //         [source.droppableId]: srcBoard,
+    //       };
+    //       // delete localStorage value board
+    //       localStorage.setItem("toDos", JSON.stringify(newBoards));
+    //       return newBoards;
+    //     };
 
-        const dstBoard = [...allBoards[destination.droppableId]];
+    //     const dstBoard = [...allBoards[destination.droppableId]];
         
-        // drag to another board
-        dstBoard.splice(destination.index, 0, ...item);
-        const newBoards ={
-          ...allBoards,
-          [source.droppableId]: srcBoard,
-          [destination.droppableId]: dstBoard
-        }
-        //  edit localStorage value board
-        localStorage.setItem("toDos", JSON.stringify(newBoards));
-        return newBoards
-      })
-    }
+    //     // drag to another board
+    //     dstBoard.splice(destination.index, 0, ...item);
+    //     const newBoards ={
+    //       ...allBoards,
+    //       [source.droppableId]: srcBoard,
+    //       [destination.droppableId]: dstBoard
+    //     }
+    //     //  edit localStorage value board
+    //     localStorage.setItem("toDos", JSON.stringify(newBoards));
+    //     return newBoards
+    //   })
+    // }
   }
   const {register, setValue, handleSubmit} = useForm<IForm>();
+  // Add new board
   const onAddBoard = (data:IForm) => {
-    
-    setToDos((allBoards)=>{
+    setBoards((allBoards)=>{
       const newBoards = {
         ...allBoards,
         [data.boardName]: [],
       }
       //  edit localStorage value board
-      localStorage.setItem("toDos", JSON.stringify(newBoards));
+      localStorage.setItem("boards", JSON.stringify(newBoards));
       return newBoards;
     })
   }
@@ -152,8 +148,14 @@ function App() {
       </Form>
       <BoardWrapper>
         <Boards>
-        {Object.keys(toDos).map(boardId => 
-        <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>
+        {boards.map((board, index) => 
+        <Board 
+          boardId={board.id}
+          index={index}
+          key={board.id} 
+          boardName={board.boardName}
+          items={board.items}
+          />
         )}
       </Boards>
       </BoardWrapper>

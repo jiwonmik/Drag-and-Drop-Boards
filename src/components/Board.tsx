@@ -1,9 +1,11 @@
-import { useSetRecoilState } from "recoil";
-import { toDoState,ITodo } from "../atom";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { boardState, IItem } from "../atom";
 import { useForm } from "react-hook-form";
 import { Droppable } from "react-beautiful-dnd";
 import DraggableCard from "./DraggableCard";
 import styled from "styled-components";
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Title = styled.h2`
   text-align: center;
@@ -15,7 +17,6 @@ const Wrapper =styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px 0px;
-  padding-top: 30px;
   border-radius: 5px;
   min-height: 200px;
   background-color: ${(props) => props.theme.boardColor};
@@ -43,61 +44,100 @@ const Input = styled.input`
   border-radius: 5px;
   border: 1px solid #dee2e6;
 `;
+
+const BoardDelete = styled.button`  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+`;
+const DeleteWrapper = styled.div`
+  display: flex;
+  justify-content: right;
+  margin-right: 10px;
+`;
 interface IAreaProps {
   isDraggingOver: boolean;
   isDraggingFromThis: boolean;
 }
 
 interface IBoardProps {
-  toDos: ITodo[];
-  boardId: string;
+  boardId: number;
+  boardName: string;
+  index: number;
+  items: IItem[];
 }
 interface IForm {
-  toDo: string;
+  item: string;
 }
 
-function Board({toDos, boardId}: IBoardProps){
-  const setToDos = useSetRecoilState(toDoState);
+function Board({boardId, boardName, index, items}: IBoardProps){
+  const [boards, setBoards] = useRecoilState(boardState);
   const {register, setValue, handleSubmit} = useForm<IForm>();
-  const onValid = ({toDo}:IForm) => {
-    const newToDo = {
+  const onAddItem = ({item}:IForm) => {
+    const newItem = {
       id: Date.now(),
-      text: toDo
+      text: item
     };
-    
-    setToDos((allBoards) => {
-      const newBoards = {
-        ...allBoards,
-        [boardId]: [newToDo, ...allBoards[boardId]]
-      }
-      // add new item to localStorage
-      localStorage.setItem("toDos", JSON.stringify(newBoards));
+    setBoards((allBoards) => {
+      const targetBoard = allBoards[index];
+      const newItems = [...targetBoard.items, newItem];
+      const newBoard = {...targetBoard, items: newItems};
+      const newBoards = [
+        ...allBoards.slice(0, index),
+        newBoard,
+        ...allBoards.slice(index+1),
+      ]
       return newBoards;
     });
-    setValue("toDo", "");
+    setValue("item", "");
   }
+  useEffect(()=>{
+    // add new item to localStorage
+    localStorage.setItem("boards", JSON.stringify(boards));
+  }, [boards]);
+  const onBoardDelete = () => {
+    setBoards((allBoards)=>{
+      const newBoards = [
+        ...allBoards.slice(0,index),
+        ...allBoards.slice(index+1)
+      ]
+      // delete board from localStorage
+      localStorage.setItem("boards", JSON.stringify(newBoards));
+      return newBoards;
+    })
+  };
 
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
-      <Form onSubmit={handleSubmit(onValid)}>
+      <DeleteWrapper>
+      <BoardDelete onClick={onBoardDelete}>
+        <ClearIcon />
+      </BoardDelete>
+      </DeleteWrapper>
+      <Title>{boardName}</Title>
+      <Form onSubmit={handleSubmit(onAddItem)}>
         <Input
-        {...register("toDo", {required: true})}
-        type="text" placeholder= {`Add Task on ${boardId}`}/>
+        {...register("item", {required: true})}
+        type="text" placeholder= {`Add Task on ${boardName}`}/>
       </Form>
-      <Droppable droppableId={boardId}> 
+      <Droppable droppableId={boardId+""}> 
       {(provided, info) => (
         <Area 
           isDraggingFromThis={Boolean(info.draggingFromThisWith)}
           isDraggingOver={info.isDraggingOver}
           ref={provided.innerRef} 
           {...provided.droppableProps}>
-          {toDos.map((toDo, index) => (
+          {items.map((item, index) => (
             <DraggableCard 
-              key={toDo.id} 
+              key={item.id} 
               index={index} 
-              toDoId={toDo.id} 
-              toDoText={toDo.text}/>
+              itemId={item.id} 
+              itemText={item.text}/>
           )
           )}
           {provided.placeholder}
