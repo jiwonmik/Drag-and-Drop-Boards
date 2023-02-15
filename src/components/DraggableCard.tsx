@@ -2,7 +2,26 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import EditIcon from '@mui/icons-material/Edit';
+import ClearIcon from '@mui/icons-material/Clear';
 
+const EditBtn = styled.button`
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const DelBtn = styled.button`
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+`
 const Card = styled.div< {isDragging: boolean} >`
   display: flex;
   justify-content: space-between;
@@ -11,13 +30,16 @@ const Card = styled.div< {isDragging: boolean} >`
   margin-bottom: 5px;
   background-color: ${(props) => props.isDragging ? "#fdcb6e" : props.theme.cardColor};
   box-shadow: ${(props) => props.isDragging ? "0px 2px 5px rgba(0,0,0,0.5)" : "null"};
-`;
-const EditBtn = styled(EditIcon)`
-  color: white;
   &:hover {
-    color: black;
+    ${EditBtn} {
+      color: black;
     transition: 0.3s;
-  }
+    };
+    ${DelBtn} {
+      color: black;
+    transition: 0.3s;
+    }
+  };
 `;
 
 interface IDraggableCardProps {
@@ -27,6 +49,12 @@ interface IDraggableCardProps {
 }
 
 function DraggableCard({itemId, itemText, index}: IDraggableCardProps) {    
+  const onEditHandle = () => {
+    console.log("edit");
+  };
+  const onDelHandle = () => {
+    console.log("delete");
+  };
   return (
     <>
     <Draggable 
@@ -41,9 +69,14 @@ function DraggableCard({itemId, itemText, index}: IDraggableCardProps) {
           {...provided.dragHandleProps}
           >
             {itemText}
-          <EditBtn>
-            
+          <div>
+          <EditBtn onClick={onEditHandle}>
+            <EditIcon/>
           </EditBtn>
+          <DelBtn onClick={onDelHandle}>
+            <ClearIcon/>
+          </DelBtn>
+          </div>
         </Card>
         )}
       </Draggable>
