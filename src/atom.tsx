@@ -12,8 +12,9 @@ interface IBoard {
 }
 
 // get items from localStorage
-let localData = JSON.parse(localStorage.getItem("boards")!);
+let localData = JSON.parse(localStorage.getItem("boards")!) || [];
+
 export const boardState = atom<IBoard[]>({
-    key: "toDo",
+    key: "board",
     default: localData,    
 });
