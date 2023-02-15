@@ -16,5 +16,5 @@ let localData = JSON.parse(localStorage.getItem("boards")!) || [];
 
 export const boardState = atom<IBoard[]>({
     key: "board",
-    default: localData,    
+    default: localData
 });

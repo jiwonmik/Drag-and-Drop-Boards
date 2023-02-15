@@ -100,8 +100,16 @@ function App() {
         ];
 
         const dstBoardIndex = allBoards.findIndex((board)=> board.id== +destination.droppableId);
-        const dstItemsCopy = [...allBoards[dstBoardIndex].items];
+
+        // drag to trash
+        if (destination.droppableId === "trash") {
+          // delete localStorage value board
+          localStorage.setItem("boards", JSON.stringify(newBoards));
+          return newBoards;
+        }
+        
         // drag to another board
+        const dstItemsCopy = [...allBoards[dstBoardIndex].items];
         dstItemsCopy.splice(destination.index, 0, ...item);
         const newDstBoard ={
           ...allBoards[dstBoardIndex],
@@ -116,17 +124,6 @@ function App() {
         //  edit localStorage value board
         localStorage.setItem("boards", JSON.stringify(newBoards));
         return newBoards;
-
-        // // drag to trash
-        // if (destination.droppableId === "trash"){
-        //   const newBoards = {
-        //     ...allBoards,
-        //     [source.droppableId]: srcBoard,
-        //   };
-        //   // delete localStorage value board
-        //   localStorage.setItem("toDos", JSON.stringify(newBoards));
-        //   return newBoards;
-        // };
       })
     }
   }
