@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
 `;
-
 const BoardWrapper = styled.div`
   display: flex;
   max-width: 980px;
@@ -62,7 +61,7 @@ function App() {
     if (destination?.droppableId === source.droppableId){
       // same board movement.
       setBoards((allBoards) => {
-        const boardIndex = allBoards.findIndex((board)=> board.id== +source.droppableId);
+        const boardIndex = allBoards.findIndex((board)=> board.id === +source.droppableId);
         const itemsCopy = [...allBoards[boardIndex].items];
         const item = itemsCopy.splice(source.index, 1)
         itemsCopy.splice(destination.index, 0, ...item);
@@ -80,7 +79,7 @@ function App() {
     else{
       // different board movement.
       setBoards((allBoards)=>{
-        const srcBoardIndex = allBoards.findIndex((board)=> board.id== +source.droppableId);
+        const srcBoardIndex = allBoards.findIndex((board)=> board.id === +source.droppableId);
         const srcItemsCopy = [...allBoards[srcBoardIndex].items];
         const item = srcItemsCopy.splice(source.index, 1);
         const newSrcBoard = {
@@ -93,7 +92,7 @@ function App() {
           ...allBoards.slice(srcBoardIndex+1),
         ];
 
-        const dstBoardIndex = allBoards.findIndex((board)=> board.id== +destination.droppableId);
+        const dstBoardIndex = allBoards.findIndex((board)=> board.id === +destination.droppableId);
 
         // drag to trash
         if (destination.droppableId === "trash") {
@@ -157,7 +156,7 @@ function App() {
         {boards.map((board, index) => 
         <Board 
           boardId={board.id}
-          index={index}
+          boardIndex={index}
           key={board.id} 
           boardName={board.boardName}
           items={board.items}

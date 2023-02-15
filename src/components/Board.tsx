@@ -68,14 +68,14 @@ interface IAreaProps {
 interface IBoardProps {
   boardId: number;
   boardName: string;
-  index: number;
+  boardIndex: number;
   items: IItem[];
 }
 interface IForm {
   item: string;
 }
 
-function Board({boardId, boardName, index, items}: IBoardProps){
+function Board({boardId, boardName, boardIndex, items}: IBoardProps){
   const [boards, setBoards] = useRecoilState(boardState);
   const {register, setValue, handleSubmit} = useForm<IForm>();
   const onAddItem = ({item}:IForm) => {
@@ -84,18 +84,18 @@ function Board({boardId, boardName, index, items}: IBoardProps){
       text: item
     };
     setBoards((allBoards) => {
-      const targetBoard = allBoards[index];
+      const targetBoard = allBoards[boardIndex];
       const newItems = [...targetBoard.items, newItem];
       const newBoard = {...targetBoard, items: newItems};
       const newBoards = [
-        ...allBoards.slice(0, index),
+        ...allBoards.slice(0, boardIndex),
         newBoard,
-        ...allBoards.slice(index+1),
+        ...allBoards.slice(boardIndex+1),
       ]
       return newBoards;
     });
     setValue("item", "");
-  }
+  };
   useEffect(()=>{
     // add new item to localStorage
     localStorage.setItem("boards", JSON.stringify(boards));
@@ -103,8 +103,8 @@ function Board({boardId, boardName, index, items}: IBoardProps){
   const onBoardDelete = () => {
     setBoards((allBoards)=>{
       const newBoards = [
-        ...allBoards.slice(0,index),
-        ...allBoards.slice(index+1)
+        ...allBoards.slice(0,boardIndex),
+        ...allBoards.slice(boardIndex+1)
       ]
       // delete board from localStorage
       localStorage.setItem("boards", JSON.stringify(newBoards));
@@ -133,11 +133,13 @@ function Board({boardId, boardName, index, items}: IBoardProps){
           ref={provided.innerRef} 
           {...provided.droppableProps}>
           {items.map((item, index) => (
-            <DraggableCard 
+            <DraggableCard
+              boardIndex={boardIndex} 
               key={item.id} 
               index={index} 
               itemId={item.id} 
-              itemText={item.text}/>
+              itemText={item.text}
+              />
           )
           )}
           {provided.placeholder}
