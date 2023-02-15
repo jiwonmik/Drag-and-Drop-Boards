@@ -1,13 +1,23 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import EditIcon from '@mui/icons-material/Edit';
 
 const Card = styled.div< {isDragging: boolean} >`
+  display: flex;
+  justify-content: space-between;
   border-radius: 5px;
   padding:  10px 10px;
   margin-bottom: 5px;
   background-color: ${(props) => props.isDragging ? "#fdcb6e" : props.theme.cardColor};
   box-shadow: ${(props) => props.isDragging ? "0px 2px 5px rgba(0,0,0,0.5)" : "null"};
+`;
+const EditBtn = styled(EditIcon)`
+  color: white;
+  &:hover {
+    color: black;
+    transition: 0.3s;
+  }
 `;
 
 interface IDraggableCardProps {
@@ -18,21 +28,27 @@ interface IDraggableCardProps {
 
 function DraggableCard({itemId, itemText, index}: IDraggableCardProps) {    
   return (
-      <Draggable 
-          key={itemId} 
-          draggableId={itemId+""} 
-          index={index}>
-          {(provided,snapshot)=>(
-          <Card 
-            isDragging={snapshot.isDragging}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            >
-              {itemText}
-          </Card>
-          )}
-        </Draggable>
+    <>
+    <Draggable 
+        key={itemId} 
+        draggableId={itemId+""} 
+        index={index}>
+        {(provided,snapshot)=>(
+        <Card 
+          isDragging={snapshot.isDragging}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          >
+            {itemText}
+          <EditBtn>
+            
+          </EditBtn>
+        </Card>
+        )}
+      </Draggable>
+      
+    </>
   )
 }
 export default React.memo(DraggableCard);

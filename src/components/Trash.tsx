@@ -1,38 +1,43 @@
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import {FcEmptyTrash,FcFullTrash} from "react-icons/fc";
+
+
+interface IAreaProps {
+  isDraggingOver: boolean;
+};
 
 const Area = styled.div<IAreaProps>`
-  border-radius: 5px;
-  // background-color why not change??????
-  background-color: ${props => 
-  props.isDraggingOver ? "##ff7979":"transparent"}; 
-  transition: background-color .3s ease-in-out;
-  padding: 30px;
+  & > .full {
+    position: absolute;
+    display: ${props=> props.isDraggingOver ? "block" : "none" };
+  }
+
 `;
-interface IAreaProps {
-    isDraggingOver: boolean;
-};
-const Title = styled.h2`
-  text-align: center;
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 18px;
+
+const TrashWrapper = styled.div`
+  max-width: 980px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: right;
 `;
+
 function Trash(){
   return (
-      <>
-      <Title>🗑️</Title>
+      <TrashWrapper>
       <Droppable droppableId="trash">
       {(provided, info) => (        
       <Area 
         ref={provided.innerRef} 
         isDraggingOver={info.isDraggingOver}
         {...provided.droppableProps}>
-        {provided.placeholder}
+        <FcFullTrash size="100" className="full"/>
+        <FcEmptyTrash size="100" className="empty"/>
       </Area>
       )}
       </Droppable>
-      </>
+      </TrashWrapper>
   );
 };
 

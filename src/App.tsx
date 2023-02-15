@@ -9,7 +9,6 @@ import Trash from "./components/Trash";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 680px;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
@@ -19,7 +18,7 @@ const Wrapper = styled.div`
 
 const BoardWrapper = styled.div`
   display: flex;
-  max-width: 680px;
+  max-width: 980px;
   width: 100%;
   margin: 20px 0px 0px 0px;
   justify-content: center;
@@ -28,12 +27,7 @@ const BoardWrapper = styled.div`
   // 수정필요: 위 board들이 보이지 않음
   overflow: auto;
 `
-const TrashWrapper = styled.div`
-    padding: 10px 0px;
-    padding-top: 20px;
-    width: 100%;
-    background-color: ${(props) => props.theme.boardColor};
-`;
+
 const Boards = styled.div`
   display: grid;
   width: 100%;
@@ -107,7 +101,7 @@ function App() {
           localStorage.setItem("boards", JSON.stringify(newBoards));
           return newBoards;
         }
-        
+
         // drag to another board
         const dstItemsCopy = [...allBoards[dstBoardIndex].items];
         dstItemsCopy.splice(destination.index, 0, ...item);
@@ -149,10 +143,6 @@ function App() {
   return (
     <>
     <DragDropContext onDragEnd={onDragEnd}>
-    <TrashWrapper>
-      <Trash />
-    </TrashWrapper>
-
     <Wrapper>
       <Form onSubmit={handleSubmit(onAddBoard)}>
         <Input
@@ -175,6 +165,7 @@ function App() {
         )}
       </Boards>
       </BoardWrapper>
+      <Trash />
     </Wrapper>
     </DragDropContext>
     </>
