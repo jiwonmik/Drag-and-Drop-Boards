@@ -2,9 +2,9 @@ import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { boardState } from "./atom";
-import Trash from "./components/Trash";
 import DraggableBoard from "./components/Board/DraggableBoard";
 import BoardCreate from "./components/Board/BoardCreate";
+import Trash from "./components/Trash";
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,26 +22,22 @@ const BoardWrapper = styled.div`
   margin: 20px 0px 0px 0px;
   justify-content: center;
   align-items: center;
-  height: 500px;
-  // 수정필요: 위 board들이 보이지 않음
+  height: 100%;
   overflow: auto;
 `
 const Boards = styled.div`
-  /* display: grid;
-  grid-template-columns: repeat(3, 1fr); */
   display: flex;
   flex-direction: row;
   width: 100%;
   gap: 10px;
 `;
 
-
 function App() {
   const [boards,setBoards] = useRecoilState(boardState);
 
   const onDragEnd = (info:DropResult) => {
     const { type, source, destination } = info;
-
+    console.log(info);
     if (!destination) return;
 
     // Board movement
@@ -118,16 +114,15 @@ function App() {
   }
 
   return (
-    <>
-    <DragDropContext onDragEnd={onDragEnd}>
     <Wrapper>
+    <DragDropContext onDragEnd={onDragEnd}>
       <BoardCreate />
-      <BoardWrapper>
-        <Droppable 
-          droppableId="boards" 
-          direction="horizontal"
-          type="BOARDS">
-          {(provided) => (
+      <Droppable 
+        droppableId="boards" 
+        direction="horizontal"
+        type="BOARDS">
+        {(provided) => (
+          <BoardWrapper>
             <Boards
             ref={provided.innerRef}
             {...provided.droppableProps}>
@@ -141,15 +136,13 @@ function App() {
               />
             )}
             {provided.placeholder}
-          </Boards>
-          )}
-        </Droppable>
-      </BoardWrapper>
-      <Trash />
-    </Wrapper>
+            </Boards>
+          </BoardWrapper>
+        )}
+      </Droppable>
+      <Trash/>
     </DragDropContext>
-    </>
-
+    </Wrapper>
   );
 }
 

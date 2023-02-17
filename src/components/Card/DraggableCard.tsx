@@ -110,7 +110,6 @@ function DraggableCard({itemId, itemText, index, boardIndex}: IDraggableCardProp
   };
 
   return (
-    <>
     <Draggable 
       key={itemId} 
       draggableId={itemId+""} 
@@ -144,7 +143,6 @@ function DraggableCard({itemId, itemText, index, boardIndex}: IDraggableCardProp
       </Card>
       )}
     </Draggable>
-    </>
   )
 }
 export default React.memo(DraggableCard);

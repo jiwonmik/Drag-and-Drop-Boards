@@ -13,12 +13,10 @@ const Title = styled.h2`
   font-size: 18px;
 `
 const Board =styled.div`
-  display: flex;
-  flex-direction: column;
+  height: 100%;
   padding: 10px 0px;
   border-radius: 5px;
-  min-height: 200px;
-  width: 250px;
+  min-width: 250px;
   background-color: ${(props) => props.theme.boardColor};
 `;
 const Area = styled.div<IAreaProps>`
@@ -65,7 +63,7 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
             />
           <Droppable 
             droppableId={boardId+""} 
-            type="CARDS"> 
+            > 
             {(provided, info) => (
               <Area 
                 isDraggingFromThis={Boolean(info.draggingFromThisWith)}

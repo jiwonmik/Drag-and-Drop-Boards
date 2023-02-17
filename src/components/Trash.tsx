@@ -25,19 +25,19 @@ const TrashWrapper = styled.div`
 
 function Trash(){
   return (
-      <TrashWrapper>
-      <Droppable droppableId="trash">
-      {(provided, info) => (        
-      <Area 
-        ref={provided.innerRef} 
-        isDraggingOver={info.isDraggingOver}
-        {...provided.droppableProps}>
-        <FcFullTrash size="100" className="full"/>
-        <FcEmptyTrash size="100" className="empty"/>
-      </Area>
-      )}
-      </Droppable>
-      </TrashWrapper>
+    <TrashWrapper>
+    <Droppable droppableId="trash">
+    {(provided, info) => ( 
+    <Area
+      ref={provided.innerRef}
+      isDraggingOver={info.isDraggingOver}
+      {...provided.droppableProps}>
+      <FcFullTrash size="100" className="full"/>
+      <FcEmptyTrash size="100" className="empty"/>
+    </Area>
+    )}
+    </Droppable>
+    </TrashWrapper>
   );
 };
 

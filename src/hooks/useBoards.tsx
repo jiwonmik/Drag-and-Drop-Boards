@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { boardState } from "../atom";
 
 function useBoards(){
-    const [boards, setBoards] = useRecoilState(boardState);
+    const [boards] = useRecoilState(boardState);
 
     useEffect(()=>{
         // add new item to localStorage
