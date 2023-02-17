@@ -73,8 +73,12 @@ interface IForm {
 function DraggableCard({itemId, itemText, index, boardIndex}: IDraggableCardProps) {    
   const [editMode, setEditMode] = useState(false);
   const {register, setValue, handleSubmit} = useForm<IForm>();
-
   const [boards, setBoards] = useRecoilState(boardState);
+  
+  useEffect(()=>{
+    // add new item to localStorage
+    localStorage.setItem("boards", JSON.stringify(boards));
+  }, [boards]);
 
   const handleEdit = ({editText}:IForm) => {
     if (!editText) {
@@ -104,10 +108,7 @@ function DraggableCard({itemId, itemText, index, boardIndex}: IDraggableCardProp
     });
     setValue("editText", "");
   };
-  useEffect(()=>{
-    // add new item to localStorage
-    localStorage.setItem("boards", JSON.stringify(boards));
-  }, [boards]);
+
   return (
     <>
     <Draggable 

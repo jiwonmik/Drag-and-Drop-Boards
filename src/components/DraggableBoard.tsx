@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { boardState, IItem } from "../atom";
 import { useForm } from "react-hook-form";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import DraggableCard from "./DraggableCard";
 import styled from "styled-components";
 import ClearIcon from '@mui/icons-material/Clear';
+import useBoards from "../hooks/useBoards";
 
 const Title = styled.h2`
   text-align: center;
@@ -13,12 +13,13 @@ const Title = styled.h2`
   margin-bottom: 10px;
   font-size: 18px;
 `
-const Wrapper =styled.div`
+const Board =styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px 0px;
   border-radius: 5px;
   min-height: 200px;
+  width: 250px;
   background-color: ${(props) => props.theme.boardColor};
 `;
 
@@ -76,9 +77,11 @@ interface IForm {
 }
 
 function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
-  const [boards, setBoards] = useRecoilState(boardState);
+  const setBoards = useSetRecoilState(boardState);
   const {register, setValue, handleSubmit} = useForm<IForm>();
-  
+
+  useBoards();
+
   const onAddItem = ({item}:IForm) => {
     const newItem = {
       id: Date.now(),
@@ -97,18 +100,12 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
     });
     setValue("item", "");
   };
-  useEffect(()=>{
-    // add new item to localStorage
-    localStorage.setItem("boards", JSON.stringify(boards));
-  }, [boards]);
   const onBoardDelete = () => {
     setBoards((allBoards)=>{
       const newBoards = [
         ...allBoards.slice(0,boardIndex),
         ...allBoards.slice(boardIndex+1)
       ]
-      // delete board from localStorage
-      localStorage.setItem("boards", JSON.stringify(newBoards));
       return newBoards;
     })
   };
@@ -119,7 +116,7 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
       key={boardId}
       index={boardIndex}>
         {(provided) => (
-          <Wrapper
+          <Board
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
@@ -134,28 +131,30 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
             {...register("item", {required: true})}
             type="text" placeholder= {`Add Task on ${boardName}`}/>
           </Form>
-          <Droppable droppableId={boardId+""} type="CARDS"> 
-          {(provided, info) => (
-            <Area 
-              isDraggingFromThis={Boolean(info.draggingFromThisWith)}
-              isDraggingOver={info.isDraggingOver}
-              ref={provided.innerRef} 
-              {...provided.droppableProps}>
-              {items.map((item, index) => (
-                <DraggableCard
-                  boardIndex={boardIndex} 
-                  key={item.id} 
-                  index={index} 
-                  itemId={item.id} 
-                  itemText={item.text}
-                  />
-              )
-              )}
-              {provided.placeholder}
-            </Area>
-          )}
+          <Droppable 
+            droppableId={boardId+""} 
+            type="CARDS"> 
+            {(provided, info) => (
+              <Area 
+                isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+                isDraggingOver={info.isDraggingOver}
+                ref={provided.innerRef} 
+                {...provided.droppableProps}>
+                {items.map((item, index) => (
+                  <DraggableCard
+                    boardIndex={boardIndex} 
+                    key={item.id} 
+                    index={index} 
+                    itemId={item.id} 
+                    itemText={item.text}
+                    />
+                )
+                )}
+                {provided.placeholder}
+              </Area>
+            )}
           </Droppable>
-        </Wrapper>
+        </Board>
         )}
     </Draggable>
   );
