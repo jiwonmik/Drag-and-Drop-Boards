@@ -99,6 +99,7 @@ function DraggableCard({itemId, itemText, index, boardIndex}: IDraggableCardProp
         newBoard,
         ...allBoards.slice(boardIndex+1),
       ];
+      setEditMode((prev)=>!prev);
       return newBoards;
     });
     setValue("editText", "");

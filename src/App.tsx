@@ -1,10 +1,10 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { boardState } from "./atom";
-import Board from "./components/Board";
 import Trash from "./components/Trash";
+import DraggableBoard from "./components/DraggableBoard";
 
 const Wrapper = styled.div`
   display: flex;
@@ -152,17 +152,26 @@ function App() {
         </AddBoardBtn>
       </Form>
       <BoardWrapper>
-        <Boards>
-        {boards.map((board, index) => 
-        <Board 
-          boardId={board.id}
-          boardIndex={index}
-          key={board.id} 
-          boardName={board.boardName}
-          items={board.items}
-          />
-        )}
-      </Boards>
+        <Droppable 
+          droppableId="boards" 
+          direction="horizontal"
+          type="BOARDS">
+          {(provided) => (
+            <Boards
+            ref={provided.innerRef}
+            {...provided.droppableProps}>
+            {boards.map((board, index) => 
+            <DraggableBoard 
+              boardId={board.id}
+              boardIndex={index}
+              key={board.id} 
+              boardName={board.boardName}
+              items={board.items}
+              />
+            )}
+          </Boards>
+          )}
+        </Droppable>
       </BoardWrapper>
       <Trash />
     </Wrapper>
