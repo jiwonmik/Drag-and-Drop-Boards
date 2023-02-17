@@ -1,10 +1,10 @@
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
-import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { boardState } from "./atom";
 import Trash from "./components/Trash";
 import DraggableBoard from "./components/DraggableBoard";
+import BoardCreate from "./components/BoardCreate";
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,30 +26,15 @@ const BoardWrapper = styled.div`
   // 수정필요: 위 board들이 보이지 않음
   overflow: auto;
 `
-
 const Boards = styled.div`
-  display: grid;
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr); */
+  display: flex;
+  flex-direction: row;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
 `;
-const Form = styled.form`
-  display: flex;
-`;
-const AddBoardBtn = styled.button`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #dee2e6;
-  margin: 0px 0px 0px 10px;
-`;
-const Input = styled.input`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #dee2e6;
-`;
-interface IForm {
-  boardName: string;
-}
+
 
 function App() {
   const [boards,setBoards] = useRecoilState(boardState);
@@ -120,37 +105,12 @@ function App() {
       })
     }
   }
-  const {register, setValue, handleSubmit} = useForm<IForm>();
-  // Add new board
-  const onAddBoard = (data:IForm) => {
-    setBoards((allBoards)=>{
-      const newBoards = [
-        ...allBoards,
-        {
-          id: Date.now(),
-          boardName: data.boardName,
-          items: []
-        }
-      ]
-      setValue("boardName", "");
-      //  edit localStorage value board
-      localStorage.setItem("boards", JSON.stringify(newBoards));
-      return newBoards;
-    })
-  }
 
   return (
     <>
     <DragDropContext onDragEnd={onDragEnd}>
     <Wrapper>
-      <Form onSubmit={handleSubmit(onAddBoard)}>
-        <Input
-        {...register("boardName", {required: true})}
-        type="text" placeholder= {`Name your new Board.`}/>
-        <AddBoardBtn >
-        ADD
-        </AddBoardBtn>
-      </Form>
+      <BoardCreate />
       <BoardWrapper>
         <Droppable 
           droppableId="boards" 
