@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import DraggableCard from "./DraggableCard";
 import styled from "styled-components";
-import ClearIcon from '@mui/icons-material/Clear';
 import useBoards from "../hooks/useBoards";
+import BoardDelete from "./BoardDelete";
+import CardCreate from "./CardCreate";
 
 const Title = styled.h2`
   text-align: center;
@@ -22,7 +23,6 @@ const Board =styled.div`
   width: 250px;
   background-color: ${(props) => props.theme.boardColor};
 `;
-
 const Area = styled.div<IAreaProps>`
   border-radius: 5px;
   flex-grow: 1;  
@@ -32,84 +32,22 @@ const Area = styled.div<IAreaProps>`
   transition: background-color .3s ease-in-out;
   padding: 20px;
 `
-const Form = styled.form`
-  width: 100%;
-  input {
-    width: 100%;
-  }
-  display: flex;
-  padding: 0px 20px 0px 20px;
-`
-const Input = styled.input`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #dee2e6;
-`;
 
-const BoardDelete = styled.button`  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-`;
-const DeleteWrapper = styled.div`
-  display: flex;
-  justify-content: right;
-  margin-right: 10px;
-`;
 interface IAreaProps {
   isDraggingOver: boolean;
   isDraggingFromThis: boolean;
 }
-
 interface IBoardProps {
   boardId: number;
   boardName: string;
   boardIndex: number;
   items: IItem[];
 }
-interface IForm {
-  item: string;
-}
+
 
 function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
-  const setBoards = useSetRecoilState(boardState);
-  const {register, setValue, handleSubmit} = useForm<IForm>();
-
+  // update LocalStorage
   useBoards();
-
-  const onAddItem = ({item}:IForm) => {
-    const newItem = {
-      id: Date.now(),
-      text: item
-    };
-    setBoards((allBoards) => {
-      const targetBoard = allBoards[boardIndex];
-      const newItems = [...targetBoard.items, newItem];
-      const newBoard = {...targetBoard, items: newItems};
-      const newBoards = [
-        ...allBoards.slice(0, boardIndex),
-        newBoard,
-        ...allBoards.slice(boardIndex+1),
-      ]
-      return newBoards;
-    });
-    setValue("item", "");
-  };
-  const onBoardDelete = () => {
-    setBoards((allBoards)=>{
-      const newBoards = [
-        ...allBoards.slice(0,boardIndex),
-        ...allBoards.slice(boardIndex+1)
-      ]
-      return newBoards;
-    })
-  };
-
   return (
     <Draggable
       draggableId={boardId+""}
@@ -120,17 +58,13 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
-          <DeleteWrapper>
-          <BoardDelete onClick={onBoardDelete}>
-            <ClearIcon />
-          </BoardDelete>
-          </DeleteWrapper>
+          <BoardDelete 
+            index={boardIndex}/>
           <Title>{boardName}</Title>
-          <Form onSubmit={handleSubmit(onAddItem)}>
-            <Input
-            {...register("item", {required: true})}
-            type="text" placeholder= {`Add Task on ${boardName}`}/>
-          </Form>
+          <CardCreate 
+            index={boardIndex}
+            boardName={boardName}
+            />
           <Droppable 
             droppableId={boardId+""} 
             type="CARDS"> 
