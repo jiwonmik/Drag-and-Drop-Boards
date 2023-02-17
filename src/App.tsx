@@ -115,8 +115,8 @@ function App() {
 
   return (
     <Wrapper>
+    <BoardCreate />
     <DragDropContext onDragEnd={onDragEnd}>
-      <BoardCreate />
       <Droppable 
         droppableId="boards" 
         direction="horizontal"

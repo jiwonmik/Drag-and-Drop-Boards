@@ -1,20 +1,29 @@
-import { IItem } from "../../atom";
+import { useState } from "react";
+import { useSetRecoilState } from 'recoil';
+import { useForm } from "react-hook-form";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import DraggableCard from "../Card/DraggableCard";
-import styled from "styled-components";
-import useBoards from "../../hooks/useBoards";
-import BoardDelete from "./BoardDelete";
-import CardCreate from "../Card/CardCreate";
 
-const Title = styled.h2`
-  text-align: center;
+import { boardState, IItem } from "../../atom";
+import CardCreate from "../Card/CardCreate";
+import DraggableCard, { Input, IForm } from "../Card/DraggableCard";
+import BoardDelete from "./BoardDelete";
+import useBoards from "../../hooks/useBoards";
+
+import styled from "styled-components";
+import Edit from '@mui/icons-material/Edit';
+import Clear from "@mui/icons-material/Clear";
+
+const Title = styled.div`
+  display: block;
+  padding: 8px;
   font-weight: 600;
-  margin-bottom: 10px;
   font-size: 18px;
+  & > h2 {
+    align-items: center;
+  }
 `
 const Board =styled.div`
   height: 100%;
-  padding: 10px 0px;
   border-radius: 5px;
   min-width: 250px;
   background-color: ${(props) => props.theme.boardColor};
@@ -26,8 +35,32 @@ const Area = styled.div<IAreaProps>`
   props.isDraggingOver ? "#dfe6e9": 
   props.isDraggingFromThis ? "#b2bec3" : "transparent"}; 
   transition: background-color .3s ease-in-out;
-  padding: 20px;
+  padding: 10px 20px 20px 20px;
 `
+const BoardHead = styled.div<{ isEditMode: Boolean}>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  margin: 20px;
+  padding: 5px;
+  border: ${(props) => props.isEditMode ? "2px solid": "none"};
+  border-radius: 5px;
+`;
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+`;
+export const Button = styled.button`  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`;
 
 interface IAreaProps {
   isDraggingOver: boolean;
@@ -44,6 +77,27 @@ interface IBoardProps {
 function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
   // update LocalStorage
   useBoards();
+
+  const setBoards = useSetRecoilState(boardState);
+  const [editMode, setEditMode] = useState(false);
+  const {register, setValue, handleSubmit} = useForm<IForm>();
+  
+  const handleEdit = ({editText} : IForm) => {
+    console.log("enter");
+    setBoards((allBoards)=>{
+        const copyBoard = allBoards[boardIndex];
+        const newBoard = {
+            ...copyBoard,
+            boardName: editText
+        }
+        setEditMode((prev)=>!prev);
+        return [
+            ...allBoards.slice(0,boardIndex),
+            newBoard,
+            ...allBoards.slice(boardIndex+1)
+        ];
+    });
+}
   return (
     <Draggable
       draggableId={boardId+""}
@@ -54,9 +108,31 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
-          <BoardDelete 
-            index={boardIndex}/>
-          <Title>{boardName}</Title>
+          <BoardHead isEditMode={editMode}>
+            { editMode ? (
+                <>
+                <form onSubmit={handleSubmit(handleEdit)}>
+                    <Input {...register("editText", {required: true})}
+                    type="text"/>
+                </form>
+                <Button onClick={() => setEditMode((prev)=>!prev)}>
+                    <Clear/>
+                </Button>
+            </>
+            ) : (
+                <>
+                <Title>
+                  <h2>{boardName}</h2>
+                </Title>
+                <Buttons>
+                  <Button onClick={() => setEditMode((prev)=>!prev)}>
+                    <Edit/>
+                  </Button>
+                  <BoardDelete index={boardIndex}/>
+                </Buttons>
+                </>
+              )}
+          </BoardHead>
           <CardCreate 
             index={boardIndex}
             boardName={boardName}

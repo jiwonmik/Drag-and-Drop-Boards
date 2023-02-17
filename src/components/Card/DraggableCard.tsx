@@ -33,8 +33,8 @@ const Card = styled.div< {isDragging: boolean, isEditMode: boolean} >`
   justify-content: space-between;
   align-items: center;
   border-radius: 5px;
-  padding:  10px 10px;
   margin-top: 10px;
+  padding: 10px 10px;
   background-color: ${(props) => props.isDragging ? "#fdcb6e" : props.theme.cardColor};
   box-shadow: ${(props) => props.isDragging ? "0px 2px 5px rgba(0,0,0,0.5)" : "null"};
   &:hover {
@@ -51,13 +51,14 @@ const Card = styled.div< {isDragging: boolean, isEditMode: boolean} >`
 const Text = styled.div`
   flex: 1;
 `;
-const Input = styled.input`
+export const Input = styled.input`
   width: 100%;
   height: 100%;
   border: none;
   &:focus {
     outline: 0;
   }
+  background-color: transparent;
 `;
 
 interface IDraggableCardProps {
@@ -66,7 +67,7 @@ interface IDraggableCardProps {
   index: number;
   boardIndex: number;
 }
-interface IForm {
+export interface IForm {
   editText: string;
 }
 

@@ -1,24 +1,7 @@
 import { useSetRecoilState } from "recoil";
 import { boardState } from "../../atom";
-import styled from "styled-components";
-import ClearIcon from '@mui/icons-material/Clear';
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: right;
-  margin-right: 10px;
-`;
-
-const Delete = styled.button`  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-`;
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Button } from "./DraggableBoard";
 
 interface IBoardDelete {
     index: number;
@@ -37,11 +20,9 @@ function BoardDelete({index}:IBoardDelete){
   };
     
     return (
-      <Wrapper>
-        <Delete onClick={onBoardDelete}>
-          <ClearIcon />
-        </Delete>
-      </Wrapper>
+        <Button onClick={onBoardDelete}>
+          <DeleteIcon />
+        </Button>
     );
 }
 export default BoardDelete;

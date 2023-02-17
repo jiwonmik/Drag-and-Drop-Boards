@@ -1,17 +1,30 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { boardState } from "../../atom";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const Form = styled.form`
   display: flex;
 `;
-const AddBoardBtn = styled.button`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #dee2e6;
-  margin: 0px 0px 0px 10px;
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  color: white;
+  padding: 5px;
+  border-radius: 50%;
+  border: none;
+  & :hover {
+    cursor: pointer;
+    color: #E1E5EC;
+  }
 `;
+
 const Input = styled.input`
   padding: 10px;
   border-radius: 5px;
@@ -27,32 +40,32 @@ function BoardCreate(){
     const {register, setValue, handleSubmit} = useForm<IForm>();
 
     // Add new board
-    const onAddBoard = (data:IForm) => {
+    const onClick = () => {
       setBoards((allBoards)=>{
         const newBoards = [
           ...allBoards,
           {
             id: Date.now(),
-            boardName: data.boardName,
+            boardName: "Default",
             items: []
           }
         ]
-        setValue("boardName", "");
-        //  edit localStorage value board
-        localStorage.setItem("boards", JSON.stringify(newBoards));
         return newBoards;
       })
     }
   
     return (
-      <Form onSubmit={handleSubmit(onAddBoard)}>
-        <Input
-        {...register("boardName", {required: true})}
-        type="text" placeholder= {`Name your new Board.`}/>
-        <AddBoardBtn >
-        ADD
-        </AddBoardBtn>
-      </Form>
+      // <Form onSubmit={handleSubmit(onAddBoard)}>
+      //   <Input
+      //   {...register("boardName", {required: true})}
+      //   type="text" placeholder= {`Name your new Board.`}/>
+      //   <Button >
+      //   ADD
+      //   </Button>
+      // </Form>
+      <Button onClick={onClick}>
+        <AddBoxIcon/>
+      </Button>
     );
 };
 

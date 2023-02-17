@@ -11,9 +11,6 @@ interface IBoard {
     items: IItem[]
 }
 
-// // get items from localStorage
-// let localData = JSON.parse(localStorage.getItem("boards")!) || [];
-
 const localStorageEffect = (key: string) => ({setSelf, onSet}: any) => {
     const savedValue = localStorage.getItem(key)
     if (savedValue !== null) {
