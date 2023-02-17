@@ -1,6 +1,6 @@
 import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
-import { boardState } from "../atom";
+import { boardState } from "../../atom";
 import styled from "styled-components";
 
 const Form = styled.form`

@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { boardState } from "../atom";
+import { boardState } from "../../atom";
 import styled from "styled-components";
 import ClearIcon from '@mui/icons-material/Clear';
 

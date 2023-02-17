@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { boardState } from "../atom";
+import { boardState } from "../../atom";
 
 const Form = styled.form`
   display: flex;

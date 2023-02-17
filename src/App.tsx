@@ -3,8 +3,8 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { boardState } from "./atom";
 import Trash from "./components/Trash";
-import DraggableBoard from "./components/DraggableBoard";
-import BoardCreate from "./components/BoardCreate";
+import DraggableBoard from "./components/Board/DraggableBoard";
+import BoardCreate from "./components/Board/BoardCreate";
 
 const Wrapper = styled.div`
   display: flex;

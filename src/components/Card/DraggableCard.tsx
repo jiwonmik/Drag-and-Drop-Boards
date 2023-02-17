@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
-import { boardState } from "../atom";
+import { boardState } from "../../atom";
 import styled from "styled-components";
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';

@@ -1,12 +1,10 @@
-import { useSetRecoilState } from "recoil";
-import { boardState, IItem } from "../atom";
-import { useForm } from "react-hook-form";
+import { IItem } from "../../atom";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import DraggableCard from "./DraggableCard";
+import DraggableCard from "../Card/DraggableCard";
 import styled from "styled-components";
-import useBoards from "../hooks/useBoards";
+import useBoards from "../../hooks/useBoards";
 import BoardDelete from "./BoardDelete";
-import CardCreate from "./CardCreate";
+import CardCreate from "../Card/CardCreate";
 
 const Title = styled.h2`
   text-align: center;
