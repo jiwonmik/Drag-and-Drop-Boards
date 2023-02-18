@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSetRecoilState } from 'recoil';
 import { useForm } from "react-hook-form";
 import { Draggable, Droppable } from "react-beautiful-dnd";
@@ -168,4 +168,4 @@ function DraggableBoard({boardId, boardName, boardIndex, items, isEditMode}: IBo
   );
 };
 
-export default DraggableBoard;
+export default React.memo(DraggableBoard);
