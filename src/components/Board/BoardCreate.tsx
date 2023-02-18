@@ -1,22 +1,24 @@
 import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { boardState } from "../../atom";
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
 const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
   background: none;
   color: white;
+  width: 100px;
   padding: 5px;
   border-radius: 50%;
   border: none;
   & :hover {
     cursor: pointer;
     color: #E1E5EC;
+  };
+  & > svg {
+  font-size: 40px;
   }
 `;
 
@@ -41,7 +43,7 @@ function BoardCreate(){
   
     return (
       <Button onClick={onClick}>
-        <AddBoxIcon/>
+        <LibraryAddIcon/>
       </Button>
     );
 };
