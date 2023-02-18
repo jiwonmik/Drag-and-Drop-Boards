@@ -37,14 +37,15 @@ const Area = styled.div<IAreaProps>`
   transition: background-color .3s ease-in-out;
   padding: 10px 20px 20px 20px;
 `
-const BoardHead = styled.div<{ isEditMode: Boolean}>`
+const BoardHead = styled.div<{ editMode: Boolean}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 50px;
+  background-color: ${(props) => props.editMode ? "white": "transparent"};
   margin: 20px;
   padding: 5px;
-  border: ${(props) => props.isEditMode ? "2px solid": "none"};
+  border: ${(props) => props.editMode ? "2px solid": "none"};
   border-radius: 5px;
 `;
 const Buttons = styled.div`
@@ -71,15 +72,16 @@ interface IBoardProps {
   boardName: string;
   boardIndex: number;
   items: IItem[];
+  isEditMode: boolean;
 }
 
 
-function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
+function DraggableBoard({boardId, boardName, boardIndex, items, isEditMode}: IBoardProps){
   // update LocalStorage
   useBoards();
 
   const setBoards = useSetRecoilState(boardState);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(isEditMode);
   const {register, setValue, handleSubmit} = useForm<IForm>();
   
   const handleEdit = ({editText} : IForm) => {
@@ -108,7 +110,7 @@ function DraggableBoard({boardId, boardName, boardIndex, items}: IBoardProps){
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
-          <BoardHead isEditMode={editMode}>
+          <BoardHead editMode={editMode}>
             { editMode ? (
                 <>
                 <form onSubmit={handleSubmit(handleEdit)}>

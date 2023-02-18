@@ -1,13 +1,8 @@
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { boardState } from "../../atom";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
-const Form = styled.form`
-  display: flex;
-`;
 const Button = styled.button`
   display: flex;
   align-items: center;
@@ -25,19 +20,8 @@ const Button = styled.button`
   }
 `;
 
-const Input = styled.input`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #dee2e6;
-`;
-interface IForm {
-    boardName: string;
-}
-  
-
 function BoardCreate(){
     const setBoards = useSetRecoilState(boardState);
-    const {register, setValue, handleSubmit} = useForm<IForm>();
 
     // Add new board
     const onClick = () => {
@@ -46,8 +30,9 @@ function BoardCreate(){
           ...allBoards,
           {
             id: Date.now(),
-            boardName: "Default",
-            items: []
+            boardName: "New Board",
+            items: [],
+            isEditMode: false
           }
         ]
         return newBoards;
@@ -55,14 +40,6 @@ function BoardCreate(){
     }
   
     return (
-      // <Form onSubmit={handleSubmit(onAddBoard)}>
-      //   <Input
-      //   {...register("boardName", {required: true})}
-      //   type="text" placeholder= {`Name your new Board.`}/>
-      //   <Button >
-      //   ADD
-      //   </Button>
-      // </Form>
       <Button onClick={onClick}>
         <AddBoxIcon/>
       </Button>

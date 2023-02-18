@@ -133,6 +133,7 @@ function App() {
               key={board.id} 
               boardName={board.boardName}
               items={board.items}
+              isEditMode={board.isEditMode}
               />
             )}
             {provided.placeholder}

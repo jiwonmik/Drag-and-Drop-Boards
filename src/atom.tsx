@@ -8,7 +8,8 @@ export interface IItem {
 interface IBoard {
     id: number;
     boardName: string;
-    items: IItem[]
+    items: IItem[];
+    isEditMode: boolean;
 }
 
 const localStorageEffect = (key: string) => ({setSelf, onSet}: any) => {
@@ -27,19 +28,23 @@ export const boardState = atom<IBoard[]>({
         id: 0,
         boardName: "To Do",
         items: [
-            { id: 0, text: "Duolingo - Spanish" },
-            { id: 1, text: "Read NYT" },
-            { id: 2, text: "Check Gmail" }
-        ]},{
-            id: 1, 
-            boardName: "Doing",
-            items: []
+            { id: 1, text: "Duolingo - Spanish" },
+            { id: 2, text: "Read NYT" },
+            { id: 3, text: "Check Gmail" }
+        ],
+        isEditMode: false
         },{
-            id: 2,
+            id: 4, 
+            boardName: "Doing",
+            items: [],
+            isEditMode: false
+        },{
+            id: 5,
             boardName: "Done",
             items: [
-                { id: 0, text: "Call Sister"}
-            ]
+                { id: 6, text: "Call Sister"}
+            ],
+            isEditMode: false
         }
     ],
     effects: [localStorageEffect("trello-clone-dnd")]
