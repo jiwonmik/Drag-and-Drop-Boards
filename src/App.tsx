@@ -15,9 +15,24 @@ const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
 `;
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  width: 1100px;
+  height: 200px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px 0px 10px 0px;
+  & > h2 {
+    font-size: 40px;
+    color: white;
+    font-weight: bold;
+  }
+`
+
 const BoardWrapper = styled.div`
   display: flex;
-  max-width: 980px;
+  max-width: 1100px;
   width: 100%;
   margin: 20px 0px 0px 0px;
   justify-content: center;
@@ -115,7 +130,10 @@ function App() {
 
   return (
     <Wrapper>
-    <BoardCreate />
+    <HeaderWrapper>
+      <h2>My Boards</h2>
+      <BoardCreate/>
+    </HeaderWrapper>
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable 
         droppableId="boards" 
