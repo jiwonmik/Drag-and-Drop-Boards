@@ -16,9 +16,6 @@ const Area = styled.div<IAreaProps>`
 `;
 
 const TrashWrapper = styled.div`
-  max-width: 980px;
-  width: 100%;
-  padding: 10px;
   display: flex;
   justify-content: right;
 `;
@@ -32,8 +29,8 @@ function Trash(){
       ref={provided.innerRef}
       isDraggingOver={info.isDraggingOver}
       {...provided.droppableProps}>
-      <FcFullTrash size="100" className="full"/>
-      <FcEmptyTrash size="100" className="empty"/>
+      <FcFullTrash size="80" className="full"/>
+      <FcEmptyTrash size="80" className="empty"/>
     </Area>
     )}
     </Droppable>

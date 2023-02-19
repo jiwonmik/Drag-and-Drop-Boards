@@ -9,41 +9,41 @@ import Trash from "./components/Trash";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 `;
 
 const HeaderWrapper = styled.div`
   display: flex;
-  width: 1100px;
-  height: 200px;
   justify-content: space-between;
   align-items: center;
-  padding: 50px 0px 10px 0px;
+  width: 100%;
+  height: 200px;
+  padding: 50px 80px 0px 80px;
   & > h2 {
     font-size: 40px;
     color: white;
     font-weight: bold;
   }
+  & > div {
+    display: flex;
+  }
 `
 
 const BoardWrapper = styled.div`
   display: flex;
-  max-width: 1100px;
   width: 100%;
-  margin: 20px 0px 0px 0px;
-  justify-content: center;
-  align-items: center;
   height: 100%;
+  padding: 0px 80px 20px 80px ;
+  align-items: center;
   overflow: auto;
 `
 const Boards = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
   gap: 10px;
 `;
 
@@ -130,11 +130,14 @@ function App() {
 
   return (
     <Wrapper>
+    <DragDropContext onDragEnd={onDragEnd}>
     <HeaderWrapper>
       <h2>My Boards</h2>
-      <BoardCreate/>
+      <div>
+        <BoardCreate/>
+        <Trash/>
+      </div>
     </HeaderWrapper>
-    <DragDropContext onDragEnd={onDragEnd}>
       <Droppable 
         droppableId="boards" 
         direction="horizontal"
@@ -159,7 +162,6 @@ function App() {
           </BoardWrapper>
         )}
       </Droppable>
-      <Trash/>
     </DragDropContext>
     </Wrapper>
   );
