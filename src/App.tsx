@@ -48,6 +48,7 @@ const Boards = styled.div`
 `;
 
 function App() {
+  console.log("rendering");
   const [boards,setBoards] = useRecoilState(boardState);
 
   const onDragEnd = (info:DropResult) => {
@@ -57,7 +58,6 @@ function App() {
 
     // Board movement
     if ( type === "BOARDS") {
-      // console.log(info);
       setBoards((allBoards) => {
         const newBoards = [...allBoards];
         const board = newBoards.splice(source.index, 1);
