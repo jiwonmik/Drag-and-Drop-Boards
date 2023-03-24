@@ -7,7 +7,8 @@ This project is simple **Drag N Drop Board app** created using `react-beautiful-
 - [Setup](#setup)
 
 ## ✨ Features
-
+- Create, edit, and remove boards and items of each boards
+- Drag and Drop boards and items
 
 ## 📂 Technologies
 - Framework: `React`, `TypeScript`
