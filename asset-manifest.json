@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/Drag-and-Drop-To-Do-List/static/js/main.080fab02.js",
-    "index.html": "/Drag-and-Drop-To-Do-List/index.html",
-    "main.080fab02.js.map": "/Drag-and-Drop-To-Do-List/static/js/main.080fab02.js.map"
+    "main.js": "/Drag-and-Drop-Boards/static/js/main.d7678641.js",
+    "index.html": "/Drag-and-Drop-Boards/index.html",
+    "main.d7678641.js.map": "/Drag-and-Drop-Boards/static/js/main.d7678641.js.map"
   },
   "entrypoints": [
-    "static/js/main.080fab02.js"
+    "static/js/main.d7678641.js"
   ]
 }
