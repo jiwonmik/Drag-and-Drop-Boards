@@ -1,5 +1,5 @@
 # **My Boards** - Drag and Drop Board app
-This project is simple **Drag N Drop Board app** created using `react-beautiful-dnd` library. [Here is the demo](https://drag-and-drop-to-do-list.vercel.app/).
+This project is simple **Drag N Drop Board app** created using `react-beautiful-dnd` library. [Here is the demo](https://jiwonmik.github.io/Drag-and-Drop-Boards/).
 
 ## 📑Table of Contents
 - [Features](#features)
